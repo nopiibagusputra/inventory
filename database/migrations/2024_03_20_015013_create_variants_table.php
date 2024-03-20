@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVariantTable extends Migration
+class CreateVariantsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateVariantTable extends Migration
      */
     public function up()
     {
-        Schema::create('variant', function (Blueprint $table) {
+        Schema::create('variants', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('productId')->nullable();
             $table->string('nama', 100);
-            $table->integer('stok');
+            $table->integer('stock');
             $table->integer('harga');
             $table->userstamps();
             $table->timestamps();
 
-            $table->foreign('productId')->references('id')->on('product')->onDelete('cascade');
+            $table->foreign('productId')->references('id')->on('products')->onDelete('cascade');
         });
     }
 
@@ -33,6 +33,6 @@ class CreateVariantTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('variant');
+        Schema::dropIfExists('variants');
     }
 }

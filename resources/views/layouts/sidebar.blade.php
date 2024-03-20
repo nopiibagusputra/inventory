@@ -5,7 +5,7 @@
     <a href="index3.html" class="brand-link">
         <img src="{{ url('lte/dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
             style="opacity: .8">
-        <span class="brand-text font-weight-light">AdminLTE 3</span>
+        <span class="brand-text font-weight-light">Inventory Stock</span>
     </a>
 
     <!-- Sidebar -->
@@ -16,19 +16,7 @@
                 <img src="{{ url('lte/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
-            </div>
-        </div>
-
-        <!-- SidebarSearch Form -->
-        <div class="form-inline">
-            <div class="input-group" data-widget="sidebar-search">
-                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                <div class="input-group-append">
-                    <button class="btn btn-sidebar">
-                        <i class="fas fa-search fa-fw"></i>
-                    </button>
-                </div>
+                <a href="#" class="d-block">{{ Auth::user()->nama_karyawan }}</a>
             </div>
         </div>
 
@@ -38,17 +26,34 @@
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                <li class="nav-item">
-                <a href="/user" class="nav-link">
+                <a href="{{ route('admin.dashboard') }}" class="nav-link">
                     <i class="nav-icon fas fa-th"></i>
                     <p>Dashboard</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link">
-                        <i class="nav-icon fas fa-box"></i>
-                        <p>Data Bahan Baku</p>
+                    <a href="#" class="nav-link">
+                      <i class="nav-icon fas fa-box"></i>
+                      <p>
+                        Manajemen Data
+                        <i class="fas fa-angle-left right"></i>
+                      </p>
                     </a>
-                </li>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('list.bahan') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Data Bahan Baku</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../UI/general.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Data Variant Bahan Baku</p>
+                            </a>
+                        </li>
+                    </ul>
+                  </li>
                 <li class="nav-item">
                     <hr class="sidebar-divider">
                 </li>

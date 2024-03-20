@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Products;
-use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Schema;
 
 class ProductSeeds extends Seeder
 {
@@ -15,28 +15,73 @@ class ProductSeeds extends Seeder
      */
     public function run()
     {
-        $faker = Faker::create('id_ID');
+        Schema::disableForeignKeyConstraints();
+        Products::truncate();
+        Products::create([
+            'nama'      => 'Spons',
+            'satuan' => 'Lembar',
+            'created_by' => 1,
+        ]);
 
-        // Daftar nama barang Indonesia
-        $nama_barang = ['Lakban', 'Lem', 'Sabun', 'Spons', 'Sikat', 'Tisu', 'Kabel', 'Besi', 'Gergaji', 'Buku', 'Pensil', 'Penghapus'];
+        Products::create([
+            'nama'      => 'Bisban',
+            'satuan' => 'Meter',
+            'created_by' => 1,
+        ]);
 
-        // Inisialisasi array kosong untuk melacak nama barang yang telah digunakan
-        $used_nama_barang = [];
+        Products::create([
+            'nama'      => 'Karung',
+            'satuan' => 'Pcs',
+            'created_by' => 1,
+        ]);
 
-        for ($i = 0; $i < 10; $i++) {
-            // Ambil nama barang secara acak dari daftar nama barang yang belum digunakan
-            do {
-                $nama = $faker->randomElement($nama_barang);
-            } while (in_array($nama, $used_nama_barang));
+        Products::create([
+            'nama'      => 'Sol',
+            'satuan' => 'Pasang',
+            'created_by' => 1,
+        ]);
 
-            // Tandai nama barang yang telah digunakan
-            $used_nama_barang[] = $nama;
+        Products::create([
+            'nama'      => 'Thinner',
+            'satuan' => 'Kaleng',
+            'created_by' => 1,
+        ]);
 
-            Products::create([
-                'nama' => $nama,
-                'satuan' => $faker->randomElement(['kg', 'pcs', 'box', 'kaleng']),
-                'created_by' => 1
-            ]);
-        }
+        Products::create([
+            'nama'      => 'Lem',
+            'satuan' => 'Kaleng',
+            'created_by' => 1,
+        ]);
+
+        Products::create([
+            'nama'      => 'Cakar',
+            'satuan' => 'Lembar',
+            'created_by' => 1,
+        ]);
+
+        Products::create([
+            'nama'      => 'Kabulon',
+            'satuan' => 'Meter',
+            'created_by' => 1,
+        ]);
+
+        Products::create([
+            'nama'      => 'CCI',
+            'satuan' => 'Meter',
+            'created_by' => 1,
+        ]);
+
+        Products::create([
+            'nama'      => 'Plastik',
+            'satuan' => 'Pack',
+            'created_by' => 1,
+        ]);
+
+        Products::create([
+            'nama'      => 'Latex',
+            'satuan' => 'Botol',
+            'created_by' => 1,
+        ]);
+        Schema::enableForeignKeyConstraints();
     }
 }

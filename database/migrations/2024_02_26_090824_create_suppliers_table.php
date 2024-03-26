@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductsTable extends Migration
+class CreateSuppliersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('supplierId')->nullable();
+            $table->string('kode', 100);
             $table->string('nama', 100);
-            $table->string('satuan');
+            $table->string('alamat', 200)->nullable();
             $table->userstamps();
             $table->timestamps();
-
-            $table->foreign('supplierId')->references('id')->on('suppliers')->onDelete('cascade');
         });
     }
 
@@ -32,6 +30,6 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('supplier');
     }
 }

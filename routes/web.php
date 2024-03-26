@@ -22,8 +22,14 @@ Route::post('/auth', [Auth\AuthController::class, 'login'])->name('auth_login');
 //level admin
 Route::middleware('auth', 'validatelevels:admin')->group(function () {
     Route::get('admin/dashboard', [Admin\AdminController::class, 'index'])->name('admin.dashboard');
+    
     Route::get('admin/data/bahan', [Admin\AdminController::class, 'listBahanBaku'])->name('list.bahan');
     Route::post('admin/data/bahan', [Admin\AdminController::class, 'storeBahanBaku'])->name('store.bahan');
+   
+    Route::get('admin/data/bahan/variant', [Admin\AdminController::class, 'listVariant'])->name('list.variant');
     Route::post('admin/data/bahan/variant', [Admin\AdminController::class, 'storeVariant'])->name('store.variant');
+   
+    Route::get('admin/data/bahan/suppliers', [Admin\AdminController::class, 'listSuppliers'])->name('list.suppliers');
+    Route::post('admin/data/bahan/suppliers', [Admin\AdminController::class, 'storeSuppliers'])->name('store.suppliers');
 
 });

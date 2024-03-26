@@ -15,7 +15,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Bahan Baku .</li>
+              <li class="breadcrumb-item active">Bahan Baku</li>
             </ol>
           </div>
         </div>
@@ -45,20 +45,28 @@
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
+                    <th style="text-align: center">Supplier</th>
                     <th>Nama Bahan Baku</th>
-                    <th>Satuan Bahan Baku</th>
+                    <th style="text-align: center">Satuan Bahan Baku</th>
                     <th style="text-align: center">Action</th>
                   </tr>
                   </thead>
                   <tbody>
                     @foreach ($data as $item)
                     <tr>
-                      <td>{{$item->nama}}</td>
-                      <td>{{$item->satuan}}</td>
+                      <td>{{$item->nama_supplier}}</td>
+                      <td>{{$item->nama_produk}}</td>
+                      <td style="text-align: center">{{$item->satuan_produk}}</td>
                       <td style="text-align: center">
-                        <button type="button" class="btn btn-sm btn-success variant-button" data-toggle="modal" data-target="#variantmodal" data-id="{{ $item->id }}" data-name="{{ $item->nama }}">
+                        <button type="button" class="btn btn-sm btn-success variant-button" data-toggle="modal" data-target="#variantmodal" data-id="{{ $item->id_produk }}" data-name="{{ $item->nama_produk }}">
                           Tambah Variant
-                       </button>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-info variant-button" data-toggle="modal" data-target="#variantmodal" data-id="{{ $item->id }}" data-name="{{ $item->nama }}">
+                          Edit
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger variant-button" data-toggle="modal" data-target="#variantmodal" data-id="{{ $item->id }}" data-name="{{ $item->nama }}">
+                          Hapus
+                        </button>
                       </td>
                     </tr>
                     @endforeach
@@ -92,6 +100,15 @@
           <!-- Form for adding new material -->
           <form method="POST" action="{{ route('store.bahan') }}">
             @csrf
+            <div class="form-group">
+              <label>Select</label>
+              <select class="form-control">
+                <option disabled>Pilih Supplier</option>
+                @foreach ($supplier as $item)
+                  <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                @endforeach
+              </select>
+            </div>
             <div class="form-group">
               <label for="materialName">Nama Bahan Baku</label>
               <input type="text" class="form-control" id="materialName" name="materialName" placeholder="Masukkan Nama Bahan Baku" required>

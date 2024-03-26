@@ -41,13 +41,19 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
+                            <a href="{{ route('list.suppliers') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Data Suppliers</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('list.bahan') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Bahan Baku</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="../UI/general.html" class="nav-link">
+                            <a href="{{ route('list.variant') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Variant Bahan Baku</p>
                             </a>

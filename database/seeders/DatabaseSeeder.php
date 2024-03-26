@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Bahan_baku;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,9 +14,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(UserSeed::class);
+        $this->call(SupplierSeeds::class);
         $this->call(ProductSeeds::class);
         $this->call(VariantSeeds::class);
-        // $this->call(Bahan_baku_Seed::class);
-        // $this->call(Ukuran_Seed::class);
     }
 }

@@ -17,7 +17,7 @@ class AdminController extends Controller
     }
 
     public function listBahanBaku(){
-        $data = Products::select('products.nama as nama_produk', 'products.satuan as satuan_produk', 'products.supplierId', 'products.id as id_produk' , 'suppliers.nama as nama_supplier', 'suppliers.id as id_supplier')
+        $data = Products::select('products.nama as nama_produk', 'products.satuan as satuan_produk', 'products.supplierId as id_supplier', 'products.id as id_produk' , 'suppliers.nama as nama_supplier', 'suppliers.id as id_supplier')
                         ->join('suppliers', 'suppliers.id', '=', 'products.supplierId')
                         ->get();
         $supplier = Suppliers::all();
@@ -44,12 +44,23 @@ class AdminController extends Controller
         return redirect('/admin/data/bahan');
     }
 
-    public function updateBahanBaku($id, Request $request){
+    public function updateBahanBaku(Request $request){
+        $data = Products::findOrFail($request->material_Id);
+        $data->supplierId = $request->supplierId;
+        $data->nama = $request->materialName;
+        $data->satuan = $request->materialtype;
+        $data->save();
 
+        return response()->json(['success' => true]);
     }
 
-    public function deleteBahanBaku($id){
+    public function deleteBahanBaku(Request $request){
+        $data = Products::findOrFail($request->id);
+        $data->delete();
 
+        return response()->json([
+            'success' => true
+        ]);
     }
 
     public function listSuppliers(){
@@ -68,21 +79,32 @@ class AdminController extends Controller
         ]);
 
         Suppliers::create([
-            'kode' => $request->supplierName,
-            'nama'   => $request->supplierKode,
+            'kode' => $request->supplierKode,
+            'nama'   => $request->supplierName,
             'alamat' => $request->supplierAlamat
         ]);
 
         $request->session()->flash('info', 'Supplier Berhasil Ditambahkan!');
-        return redirect('/admin/data/suppliers');
+        return redirect('/admin/data/bahan/suppliers');
     }
 
-    public function updateSuppliers($id, Request $request){
+    public function updateSuppliers(Request $request){
+        $data = Suppliers::findOrFail($request->supplier_id);
+        $data->kode = $request->supplierKode;
+        $data->nama = $request->supplierName;
+        $data->alamat = $request->supplierAlamat;
+        $data->save();
 
+        return response()->json(['success' => true]);
     }
 
-    public function deleteSuppliers($id){
+    public function deleteSuppliers(Request $request){
+        $data = Suppliers::findOrFail($request->id);
+        $data->delete();
 
+        return response()->json([
+            'success' => true
+        ]);
     }
 
     public function listVarian(){

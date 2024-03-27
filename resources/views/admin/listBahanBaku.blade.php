@@ -61,10 +61,11 @@
                         <button type="button" class="btn btn-sm btn-success variant-button" data-toggle="modal" data-target="#variantmodal" data-id="{{ $item->id_produk }}" data-name="{{ $item->nama_produk }}">
                           Tambah Variant
                         </button>
-                        <button type="button" class="btn btn-sm btn-info variant-button" data-toggle="modal" data-target="#variantmodal" data-id="{{ $item->id }}" data-name="{{ $item->nama }}">
+                        <button type="button" class="btn btn-sm btn-info variant-button edit-bahan" data-toggle="modal" data-target="#editBahanModal" data-supplierid="{{ $item->id_supplier }}"  data-id="{{ $item->id_produk }}" data-satuan="{{ $item->satuan_produk }}" data-nama="{{ $item->nama_produk }}">
                           Edit
                         </button>
-                        <button type="button" class="btn btn-sm btn-danger variant-button" data-toggle="modal" data-target="#variantmodal" data-id="{{ $item->id }}" data-name="{{ $item->nama }}">
+                        <button type="button" class="btn btn-sm btn-danger variant-button delete-bahan"
+                          data-id="{{ $item->id_produk }}">
                           Hapus
                         </button>
                       </td>
@@ -102,7 +103,7 @@
             @csrf
             <div class="form-group">
               <label>Select</label>
-              <select class="form-control">
+              <select name="supplierId" class="form-control">
                 <option disabled>Pilih Supplier</option>
                 @foreach ($supplier as $item)
                   <option value="{{ $item->id }}">{{ $item->nama }}</option>
@@ -116,6 +117,48 @@
             <div class="form-group">
               <label for="materialStock">Satuan Bahan Baku</label>
               <input type="text" class="form-control" id="materialtype" name="materialtype" placeholder="Contoh : Kaleng, Pcs, Pack" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Simpan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="editBahanModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update Bahan Baku</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Form for adding new material -->
+          <form id="editBahanForm" method="POST" action="{{ route('update.bahan') }}">
+            @csrf
+            @method("PUT")
+            <input type="hidden" name="material_Id" id="material_Id" value="">
+            <div class="form-group">
+              <label>Select</label>
+              <select name="supplierId" id="edit_supplierId" class="form-control">
+                <option disabled>Pilih Supplier</option>
+                @foreach ($supplier as $item)
+                  <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="materialName">Nama Bahan Baku</label>
+              <input type="text" class="form-control" id="edit_materialName" name="materialName" placeholder="Masukkan Nama Bahan Baku" required>
+            </div>
+            <div class="form-group">
+              <label for="materialStock">Satuan Bahan Baku</label>
+              <input type="text" class="form-control" id="edit_materialType" name="materialtype" placeholder="Contoh : Kaleng, Pcs, Pack" required>
             </div>
           </div>
           <div class="modal-footer">
@@ -180,6 +223,76 @@
       $('#variantmodalTitle').text('Tambah Variant untuk ' + itemName);
     });
   });
-</script>  
+</script> 
+<script>
+  $(document).on('click', '.delete-bahan', function () {
+      var product_id = $(this).data('id');
+      Swal.fire({
+          title: 'Apakah anda yakin ?',
+          text: "Data yang sudah dihapus tidak dapat dikembalikan!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Hapus!',
+          cancelButtonText: 'Batalkan'
+      }).then((result) => {
+          if (result.isConfirmed) {
+              $.ajax({
+                  type: 'DELETE',
+                  url: '{{ route("delete.bahan") }}',
+                  data: {
+                      "_token": "{{ csrf_token() }}",
+                      "id": product_id
+                  },
+                  success: function (data) {
+                      Swal.fire(
+                          'Berhasil!',
+                          'Data Bahan dihapus!.',
+                          'success'
+                      ).then((result) => {
+                          location.reload();
+                      });
+                  }
+              });
+          }
+      });
+  });
+</script> 
+<script>
+  $(document).on('click', '.edit-bahan', function () {
+      var id = $(this).data('id');
+      var satuan = $(this).data('satuan');
+      var nama = $(this).data('nama');
+      var supplierId = $(this).data('supplierid');
+
+      $('#edit_supplierId option').each(function() {
+          if ($(this).val() == supplierId) {
+              $(this).prop('selected', true);
+          }
+      });
+      $('#material_Id').val(id);
+      $('#edit_materialType').val(satuan);
+      $('#edit_materialName').val(nama);
+  });
+
+  $('#editBahanForm').submit(function (e) {
+      e.preventDefault();
+      var formData = $(this).serialize();
+      $.ajax({
+          type: 'PUT',
+          url: '{{ route("update.bahan") }}',
+          data: formData,
+          success: function (response) {
+              $('#editBahanModal').modal('hide');
+              location.reload();
+          },
+          error: function (xhr, status, error) {
+              // Handle errors
+              console.log(xhr)
+          }
+      });
+  });
+</script>
 @endpush
 @endsection

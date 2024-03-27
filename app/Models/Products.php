@@ -11,6 +11,7 @@ class Products extends Model
     use HasFactory, UserstampsTrait;
 
     protected $fillable = [
+        'supplierId',
         'nama',
         'satuan'
     ];

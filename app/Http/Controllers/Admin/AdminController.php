@@ -107,12 +107,12 @@ class AdminController extends Controller
         ]);
     }
 
-    public function listVarian(){
+    public function listVariant(){
         $data = Variants::select('products.nama as nama_produk', 'products.id as id_produk', 'variants.nama as nama_variant', 'variants.id as id_variant', 'variants.stock as stock_variant', 'variants.harga as harga_variant')
-                            ->join('products', 'products.id', '=', 'variant.productId')
+                            ->join('products', 'products.id', '=', 'variants.productId')
                             ->get();
 
-        return view('admin.listVarian', [
+        return view('admin.listVariant', [
             'data' => $data
         ]);
     }
@@ -120,14 +120,13 @@ class AdminController extends Controller
     public function storeVariant(Request $request){
         $this->validate($request, [
             'nama'  =>'required',
-            'stock' =>'required',
             'harga' =>'required'
         ]);
 
         Variants::create([
             'productId' => $request->item_id,
             'nama'  => $request->nama,
-            'stock' => $request->stock,
+            'stock' => 0,
             'harga' => $request->harga
         ]);
 
@@ -135,11 +134,21 @@ class AdminController extends Controller
         return redirect('/admin/data/bahan');
     }
 
-    public function updateVariant($id, Request $request){
+    public function updateVariant(Request $request){
+        $data = Variants::findOrFail($request->id_variant);
+        $data->harga = $request->harga;
+        $data->nama = $request->nama;
+        $data->save();
 
+        return response()->json(['success' => true]);
     }
 
-    public function deleteVariant($id){
+    public function deleteVariant(Request $request){
+        $data = Variants::findOrFail($request->id);
+        $data->delete();
 
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

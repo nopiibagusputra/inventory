@@ -188,10 +188,6 @@
                         <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan Nama" required>
                     </div>
                     <div class="form-group">
-                        <label for="stock">Stock</label>
-                        <input type="number" class="form-control" id="stock" name="stock" placeholder="Masukkan Stock" required>
-                    </div>
-                    <div class="form-group">
                         <label for="harga">Harga</label>
                         <input type="number" class="form-control" id="harga" name="harga" placeholder="Masukkan Harga" required>
                     </div>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Data Bahan Baku')
+@section('title', 'Data Variants')
 
 @section('content')
 <!-- Content Wrapper. Contains page content -->
@@ -10,12 +10,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Bahan Baku</h1>
+                    <h1>Variant</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Bahan Baku</li>
+                        <li class="breadcrumb-item active">Variant</li>
                     </ol>
                 </div>
             </div>
@@ -36,44 +36,35 @@
                     @endif
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Daftar Bahan Baku</h3>
-                            <button type="button" class="btn btn-sm btn-primary float-right" data-toggle="modal"
-                                data-target="#tambahBahanBakuModal">
-                                Tambah Bahan Baku
-                            </button>
+                            <h3 class="card-title">Daftar Variant</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th style="text-align: center">Supplier</th>
-                                        <th>Nama Bahan Baku</th>
-                                        <th style="text-align: center">Satuan Bahan Baku</th>
+                                        <th style="text-align: center">Product</th>
+                                        <th>Nama Variant</th>
+                                        <th style="text-align: center">Stock</th>
+                                        <th style="text-align: center">Harga</th>
                                         <th style="text-align: center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($data as $item)
                                         <tr>
-                                            <td>{{ $item->nama_supplier }}</td>
-                                            <td>{{ $item->nama_produk }}</td>
-                                            <td style="text-align: center">{{ $item->satuan_produk }}</td>
+                                            <td style="text-align: center; font-weight: bold">{{ $item->nama_produk }}</td>
+                                            <td>{{ $item->nama_variant }}</td>
+                                            <td style="text-align: center">{{ $item->stock_variant }}</td>
+                                            <td>Rp {{ number_format($item->harga_variant, 0, ',', '.') }}</td>
                                             <td style="text-align: center">
-                                                <button type="button" class="btn btn-sm btn-success variant-button"
+                                                <button type="button" class="btn btn-sm btn-info edit-variant"
                                                     data-toggle="modal" data-target="#variantmodal"
-                                                    data-id="{{ $item->id_produk }}"
-                                                    data-name="{{ $item->nama_produk }}">
-                                                    Tambah Variant
-                                                </button>
-                                                <button type="button" class="btn btn-sm btn-info variant-button"
-                                                    data-toggle="modal" data-target="#variantmodal"
-                                                    data-id="{{ $item->id }}" data-name="{{ $item->nama }}">
+                                                    data-id="{{ $item->id_variant }}" data-nama="{{ $item->nama_produk }}" data-variant="{{ $item->nama_variant }}" data-harga="{{ $item->harga_variant }}" data-itemId="{{ $item->id_produk}}">
                                                     Edit
                                                 </button>
-                                                <button type="button" class="btn btn-sm btn-danger variant-button"
-                                                    data-toggle="modal" data-target="#variantmodal"
-                                                    data-id="{{ $item->id }}" data-name="{{ $item->nama }}">
+                                                <button type="button" class="btn btn-sm btn-danger variant-button delete-bahan"
+                                                    data-id="{{ $item->id_variant }}">
                                                     Hapus
                                                 </button>
                                             </td>
@@ -95,52 +86,7 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-
-<div class="modal fade" id="tambahBahanBakuModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tambah Bahan Baku</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Form for adding new material -->
-                <form method="POST" action="{{ route('store.bahan') }}">
-                    @csrf
-                    <div class="form-group">
-                        <label>Select</label>
-                        <select class="form-control">
-                            <option disabled>Pilih Supplier</option>
-                            @foreach($supplier as $item)
-                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="materialName">Nama Bahan Baku</label>
-                        <input type="text" class="form-control" id="materialName" name="materialName"
-                            placeholder="Masukkan Nama Bahan Baku" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="materialStock">Satuan Bahan Baku</label>
-                        <input type="text" class="form-control" id="materialtype" name="materialtype"
-                            placeholder="Contoh : Kaleng, Pcs, Pack" required>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="variantmodal" tabindex="-1" role="dialog" aria-labelledby="variantmodalTitle"
-    aria-hidden="true">
+<div class="modal fade" id="variantmodal" tabindex="-1" role="dialog" aria-labelledby="variantmodalTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -150,34 +96,28 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="variantForm" action="{{ route('store.variant') }}" method="POST">
+                <form id="variantForm" action="{{ route('update.variant') }}" method="POST">
                     @csrf
+                    @method("PUT")
                     <input type="hidden" name="item_id" id="itemId" value="">
+                    <input type="hidden" name="id_variant" id="id_variant" value="">
                     <div class="form-group">
                         <label for="nama">Nama Variant</label>
-                        <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan Nama"
-                            required>
-                    </div>
-                    <div class="form-group">
-                        <label for="stock">Stock</label>
-                        <input type="number" class="form-control" id="stock" name="stock" placeholder="Masukkan Stock"
-                            required>
+                        <input type="text" class="form-control" id="edit_nama" name="nama" placeholder="Masukkan Nama" required>
                     </div>
                     <div class="form-group">
                         <label for="harga">Harga</label>
-                        <input type="number" class="form-control" id="harga" name="harga" placeholder="Masukkan Harga"
-                            required>
+                        <input type="number" class="form-control" id="edit_harga" name="harga" placeholder="Masukkan Harga" required>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-</div>
-
+  </div>
 @push('scripts')
     <script>
         $(function () {
@@ -192,14 +132,79 @@
     </script>
     <script>
         $(document).ready(function () {
-            $('.variant-button').click(function () {
-                var itemId = $(this).data('id');
-                var itemName = $(this).data('name');
-                $('#itemId').val(itemId);
-                $('#variantmodalTitle').text('Tambah Variant untuk ' + itemName);
+          $('.edit-variant').click(function() {
+            var itemId = $(this).data('id');
+            var itemName = $(this).data('nama');
+            $('#itemId').val(itemId);
+            $('#variantmodalTitle').text('Edit Variant untuk Produk ' + itemName);
+          });
+        });
+    </script>
+    <script>
+        $(document).on('click', '.edit-variant', function () {
+            var id_variant = $(this).data('id');
+            var harga = $(this).data('harga');
+            var nama = $(this).data('variant');
+            var item_id = $(this).data('itemId');
+      
+            $('#id_variant').val(id_variant);
+            $('#item_id').val(item_id);
+            $('#edit_harga').val(harga);
+            $('#edit_nama').val(nama);
+        });
+      
+        $('#variantForm').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'PUT',
+                url: '{{ route("update.variant") }}',
+                data: formData,
+                success: function (response) {
+                    $('#variantmodal').modal('hide');
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors
+                    console.log(xhr)
+                }
             });
         });
-
     </script>
+    <script>
+    $(document).on('click', '.delete-bahan', function () {
+        var variant_id = $(this).data('id');
+        Swal.fire({
+            title: 'Apakah anda yakin ?',
+            text: "Data yang sudah dihapus tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Hapus!',
+            cancelButtonText: 'Batalkan'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: '{{ route("delete.variant") }}',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        "id": variant_id
+                    },
+                    success: function (data) {
+                        Swal.fire(
+                            'Berhasil!',
+                            'Data Variant dihapus!.',
+                            'success'
+                        ).then((result) => {
+                            location.reload();
+                        });
+                    }
+                });
+            }
+        });
+    });
+    </script> 
 @endpush
 @endsection

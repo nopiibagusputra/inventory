@@ -51,6 +51,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $userId = Auth::user()->id_user;
+                                        $userName = Auth::user()->nama_karyawan;
+                                    @endphp
                                     @foreach($data as $item)
                                         <tr>
                                             <td style="text-align: center; font-weight: bold">{{ $item->nama_produk }}</td>
@@ -58,12 +62,17 @@
                                             <td style="text-align: center">{{ $item->stock_variant }}</td>
                                             <td>Rp {{ number_format($item->harga_variant, 0, ',', '.') }}</td>
                                             <td style="text-align: center">
+                                                <button type="button" class="btn btn-sm btn-success restock"
+                                                    data-toggle="modal" data-target="#restockmodal"
+                                                    data-userId="{{ $userId }}" data-userName="{{ $userName }}" data-id="{{ $item->id_variant }}" data-nama="{{ $item->nama_produk }}" data-variant="{{ $item->nama_variant }}" data-harga="{{ $item->harga_variant }}" data-itemId="{{ $item->id_produk}}">
+                                                    Restock
+                                                </button>
                                                 <button type="button" class="btn btn-sm btn-info edit-variant"
                                                     data-toggle="modal" data-target="#variantmodal"
                                                     data-id="{{ $item->id_variant }}" data-nama="{{ $item->nama_produk }}" data-variant="{{ $item->nama_variant }}" data-harga="{{ $item->harga_variant }}" data-itemId="{{ $item->id_produk}}">
                                                     Edit
                                                 </button>
-                                                <button type="button" class="btn btn-sm btn-danger variant-button delete-bahan"
+                                                <button type="button" class="btn btn-sm btn-danger variant-button delete-variant"
                                                     data-id="{{ $item->id_variant }}">
                                                     Hapus
                                                 </button>
@@ -110,14 +119,59 @@
                         <input type="number" class="form-control" id="edit_harga" name="harga" placeholder="Masukkan Harga" required>
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-  </div>
+</div>
+<div class="modal fade" id="restockmodal" tabindex="-1" role="dialog" aria-labelledby="variantmodalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="variantmodalTitle">Form Restock</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="restockForm" action="{{ route('update.variant') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="userId" id="userId" value="">
+                    <input type="hidden" name="productId" id="productId" value="">
+                    <input type="hidden" name="variantId" id="variantId" value="">
+                    <input type="hidden" name="variantPrice" id="variantPrice" value="">
+                    <div class="form-group">
+                        <label for="nama">Nama Karyawan</label>
+                        <input type="text" class="form-control" id="nama_karyawan" name="nama_karyawan" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="nama">Nama Produk</label>
+                        <input type="text" class="form-control" id="nama_produk" name="nama_produk" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="nama">Nama Variant</label>
+                        <input type="text" class="form-control" id="nama_variant" name="nama_variant" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="harga">Harga Variant</label>
+                        <input type="number" class="form-control" id="harga_variant" name="harga_variant" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="nama">Jumlah Restock</label>
+                        <input type="text" class="form-control" id="restock" name="restock" placeholder="Masukkan Jumlah Restock" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Pengajuan Stock</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @push('scripts')
     <script>
         $(function () {
@@ -128,7 +182,6 @@
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
-
     </script>
     <script>
         $(document).ready(function () {
@@ -172,7 +225,47 @@
         });
     </script>
     <script>
-    $(document).on('click', '.delete-bahan', function () {
+        $(document).on('click', '.restock', function () {
+            var variantId = $(this).data('id');
+            var variantName = $(this).data('variant');
+            var variantPrice = $(this).data('harga');
+            var productId = $(this).data('itemid');
+            var productName = $(this).data('nama');
+            var userId = $(this).data('userid');
+            var userName = $(this).data('username');
+      
+            $('#nama_karyawan').val(userName);
+            $('#nama_produk').val(productName);
+            $('#nama_variant').val(variantName);
+            $('#harga_variant').val(variantPrice);
+
+            // post data
+            $('#userId').val(userId);
+            $('#productId').val(productId);
+            $('#variantId').val(variantId);
+            $('#variantPrice').val(variantPrice);
+        });
+      
+        $('#restockForm').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'PUT',
+                url: '{{ route("update.variant") }}',
+                data: formData,
+                success: function (response) {
+                    $('#variantmodal').modal('hide');
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors
+                    console.log(xhr)
+                }
+            });
+        });
+    </script>
+    <script>
+    $(document).on('click', '.delete-variant', function () {
         var variant_id = $(this).data('id');
         Swal.fire({
             title: 'Apakah anda yakin ?',

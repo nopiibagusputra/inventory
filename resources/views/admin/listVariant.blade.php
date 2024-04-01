@@ -163,6 +163,10 @@
                         <label for="nama">Jumlah Restock</label>
                         <input type="text" class="form-control" id="restock" name="restock" placeholder="Masukkan Jumlah Restock" required>
                     </div>
+                    <div class="form-group">
+                        <label for="nama">Estimasi Pengiriman</label>
+                        <input type="text" class="form-control" id="lead_time" name="lead_time" placeholder="Masukkan Lama Estimasi Pengiriman (Hari)" required>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Pengajuan Stock</button>

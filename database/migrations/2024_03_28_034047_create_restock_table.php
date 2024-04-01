@@ -21,7 +21,8 @@ class CreateRestockTable extends Migration
             $table->unsignedBigInteger('userId');
             $table->integer('stock');
             $table->integer('total_harga');
-            $table->userstamps();
+            $table->smallInteger('status')->default(0); //0 in progress, 1 valid, 2 invalid
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

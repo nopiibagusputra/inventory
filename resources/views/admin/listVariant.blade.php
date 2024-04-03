@@ -137,7 +137,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="restockForm" action="{{ route('update.variant') }}" method="POST">
+                <form id="restockForm" action="{{ route('request.restock') }}" method="POST">
                     @csrf
                     <input type="hidden" name="userId" id="userId" value="">
                     <input type="hidden" name="productId" id="productId" value="">
@@ -248,24 +248,6 @@
             $('#productId').val(productId);
             $('#variantId').val(variantId);
             $('#variantPrice').val(variantPrice);
-        });
-      
-        $('#restockForm').submit(function (e) {
-            e.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                type: 'PUT',
-                url: '{{ route("update.variant") }}',
-                data: formData,
-                success: function (response) {
-                    $('#variantmodal').modal('hide');
-                    location.reload();
-                },
-                error: function (xhr, status, error) {
-                    // Handle errors
-                    console.log(xhr)
-                }
-            });
         });
     </script>
     <script>

@@ -49,6 +49,7 @@
                                         <th style="text-align: center">Request</th>
                                         <th>Total Harga</th>
                                         <th style="text-align: center">Status</th>
+                                        <th>Catatan</th>
                                         <th style="text-align: center">Action</th>
                                     </tr>
                                 </thead>
@@ -69,10 +70,17 @@
                                                     <span class="badge badge-danger">Not Match</span>
                                                 @endif
                                             </td>
+                                            <td>{{ $item->notes }}</td>
                                             <td style="text-align: center">
-                                                <button type="button" class="btn btn-sm btn-info variant-button edit-supplier" data-toggle="modal" data-target="#editSupplierModal" data-id="{{ $item->id }}" data-kode="{{ $item->kode }}" data-nama="{{ $item->nama }}" data-alamat="{{ $item->alamat }}">
-                                                    Update Status
-                                                </button>
+                                                @if($item->status == 1 OR $item->status == 2)
+                                                    <button type="button" disabled class="btn btn-sm btn-danger">
+                                                        Sudah Validasi
+                                                    </button>
+                                                @else
+                                                    <button type="button" class="btn btn-sm btn-info variant-button validasi" data-toggle="modal" data-target="#updateStatusModal" data-kode="{{ $item->kode_pemesanan }}" data-variantid="{{ $item->idVariant }}" data-variant="{{ $item->namaVariant }}" data-product="{{ $item->namaProduct}}">
+                                                        Update Status
+                                                    </button>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -93,37 +101,46 @@
 </div>
 <!-- /.content-wrapper -->
 
-<div class="modal fade" id="editSupplierModal" tabindex="-1" role="dialog" aria-labelledby="editSupplierModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateStatusModal" tabindex="-1" role="dialog" aria-labelledby="editSupplierModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editSupplierModalLabel">Edit Supplier</h5>
+                <h5 class="modal-title" id="editSupplierModalLabel">Validasi Stock</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Form for editing existing supplier -->
-                <form id="editSupplierForm" method="POST" action="{{ route('update.suppliers') }}">
+                <!-- Form for update status -->
+                <form id="validasiForm" method="POST" action="{{ route('update.restock') }}">
                     @csrf
-                    @method("PUT")
-                    <input type="hidden" name="supplier_id" id="supplier_id">
+                    @method("PATCH")
+                    <input type="hidden" name="kode" id="kode" value="">
+                    <input type="hidden" name="variantId" id="variantId" value="">
                     <div class="form-group">
-                        <label for="edit_supplierKode">Kode</label>
-                        <input type="text" class="form-control" id="edit_supplierKode" name="supplierKode" required>
+                        <label for="namaBarang">Nama Barang</label>
+                        <input type="text" class="form-control" id="namaBarang" name="namaBarang" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="edit_supplierName">Nama Supplier</label>
-                        <input type="text" class="form-control" id="edit_supplierName" name="supplierName" required>
+                        <label for="jumlahBarang">Jumlah Barang Datang*</label>
+                        <input type="number" class="form-control" id="jumlahBarang" name="jumlahBarang" required>
                     </div>
                     <div class="form-group">
-                        <label for="edit_supplierAlamat">Alamat</label>
-                        <input type="text" class="form-control" id="edit_supplierAlamat" name="supplierAlamat" required>
+                        <label>Kondisi Barang*</label>
+                        <select name="kondisiBarang" id="kondisiBarang" class="form-control" required>
+                            <option disabled selected>Pilih Status</option>
+                            <option value=1>Baik</option>
+                            <option value=2>Kurang Baik</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="catatan">Catatan</label>
+                        <textarea rows="4" cols="50" class="form-control" id="catatan" name="catatan"></textarea>
                     </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-primary">Validasi</button>
             </div>
             </form>
         </div>
@@ -144,35 +161,35 @@
 
     </script>
     <script>
-        $(document).on('click', '.edit-supplier', function () {
-            var id = $(this).data('id');
+        $(document).on('click', '.validasi', function () {
             var kode = $(this).data('kode');
-            var nama = $(this).data('nama');
-            var alamat = $(this).data('alamat');
-    
-            $('#supplier_id').val(id);
-            $('#edit_supplierKode').val(kode);
-            $('#edit_supplierName').val(nama);
-            $('#edit_supplierAlamat').val(alamat);
+            var product = $(this).data('product');
+            var variant = $(this).data('variant');
+            var variantId = $(this).data('variantid');
+
+            $('#kode').val(kode);
+            $('#variantId').val(variantId);
+            $('#namaBarang').val(product+' '+variant);
         });
-    
-        $('#editSupplierForm').submit(function (e) {
-            e.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                type: 'PUT',
-                url: '{{ route("update.suppliers") }}',
-                data: formData,
-                success: function (response) {
-                    $('#editSupplierModal').modal('hide');
-                    location.reload();
-                },
-                error: function (xhr, status, error) {
-                    // Handle errors
-                    console.log(xhr)
-                }
-            });
-        });
+
+        // $('#validasiForm').submit(function (e) {
+        //     e.preventDefault();
+        //     var formData = $(this).serialize();
+        //     $.ajax({
+        //         type: 'GET',
+        //         url: '{{ route("update.restock") }}',
+        //         data: formData,
+        //         success: function (response) {
+        //             $('#updateStatusModal').modal('hide');
+        //             // location.reload();
+        //             console.log(response)
+        //         },
+        //         error: function (xhr, status, error) {
+        //             // Handle errors
+        //             console.log(xhr)
+        //         }
+        //     });
+        // });
     </script>
 @endpush
 @endsection

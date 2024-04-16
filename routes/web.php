@@ -36,6 +36,8 @@ Route::middleware('auth', 'validatelevels:admin')->group(function () {
     Route::put('admin/data/bahan', [Admin\ProductController::class, 'updateBahanBaku'])->name('update.bahan');
     Route::put('admin/data/bahan/variant', [Admin\VariantController::class, 'updateVariant'])->name('update.variant');
     Route::put('admin/data/bahan/suppliers', [Admin\SupplierController::class, 'updateSuppliers'])->name('update.suppliers');
+    
+    Route::patch('admin/data/bahan/variant/restock/update', [Admin\RestockController::class, 'approveRestock'])->name('update.restock');
 
     Route::delete('admin/data/bahan', [Admin\ProductController::class, 'deleteBahanBaku'])->name('delete.bahan');
     Route::delete('admin/data/bahan/variant', [Admin\VariantController::class, 'deleteVariant'])->name('delete.variant');

@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Restocks;
+use App\Models\Products;
+use App\Models\Variants;
 
 class RestockController extends Controller
 {
     public function listRestock(){
-        $data = Restocks::select('products.id as idProduct', 'products.nama as namaProduct', 'variants.id as idVariant', 'variants.nama as namaVariant', 'user.id_user as idUser', 'user.nama_karyawan as userName', 'restocks.*')
+        $data = Restocks::select('products.id as idProduct', 'products.nama as namaProduct', 'variants.id as idVariant', 'variants.id as idVariant', 'variants.nama as namaVariant', 'user.id_user as idUser', 'user.nama_karyawan as userName', 'restocks.*')
                         ->join('products', 'products.id', '=', 'restocks.productId')
                         ->join('variants', 'variants.id', '=', 'restocks.variantId')
                         ->join('user', 'user.id_user', '=', 'restocks.userId')
@@ -47,6 +49,23 @@ class RestockController extends Controller
         ]);
 
         $request->session()->flash('info', 'Request berhasil dikirim!');
+        return redirect('/admin/data/bahan/variant/restock');
+    }
+
+    public function approveRestock(Request $request){
+        $stock_lama = Variants::where('id', $request->variantId)->first();
+        $stock_baru = $stock_lama->stock + $request->jumlahBarang;
+
+        $data = Variants::where('id', $request->variantId)->first();
+        $data->stock = $stock_baru;
+        $data->save();
+
+        $po = Restocks::where('kode_pemesanan', $request->kode)->first();
+        $po->status = $request->kondisiBarang;
+        $po->notes  = $request->catatan;
+        $po->save();
+
+        $request->session()->flash('info', 'Request berhasil disetujui!');
         return redirect('/admin/data/bahan/variant/restock');
     }
 }

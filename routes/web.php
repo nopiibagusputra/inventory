@@ -27,6 +27,7 @@ Route::middleware('auth', 'validatelevels:admin')->group(function () {
     Route::get('admin/data/bahan/variant', [Admin\VariantController::class, 'listVariant'])->name('list.variant');
     Route::get('admin/data/bahan/suppliers', [Admin\SupplierController::class, 'listSuppliers'])->name('list.suppliers');
     Route::get('admin/data/bahan/variant/restock', [Admin\RestockController::class, 'listRestock'])->name('list.restock');
+    Route::get('admin/data/bahan/variant/out', [Admin\StockOutController::class, 'listOut'])->name('list.out');
     
     Route::post('admin/data/bahan', [Admin\ProductController::class, 'storeBahanBaku'])->name('store.bahan');
     Route::post('admin/data/bahan/variant', [Admin\VariantController::class, 'storeVariant'])->name('store.variant');

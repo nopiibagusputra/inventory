@@ -63,13 +63,13 @@
                 <li class="nav-item">
                     <a href="{{ route('list.restock') }}" class="nav-link">
                         <i class="nav-icon fas fa-file-contract"></i>
-                        <p>Validasi Stock</p>
+                        <p>Form Validasi Stock</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="{{ route('list.out') }}" class="nav-link">
                         <i class="nav-icon fas fa-file-import"></i>
-                        <p>Form Pengeluaran</p>
+                        <p>Form Pengeluaran Stock</p>
                     </a>
                 </li>
                 <li class="nav-item">

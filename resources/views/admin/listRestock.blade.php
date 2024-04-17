@@ -10,7 +10,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Suppliers</h1>
+                    <h1>Restock</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -171,25 +171,6 @@
             $('#variantId').val(variantId);
             $('#namaBarang').val(product+' '+variant);
         });
-
-        // $('#validasiForm').submit(function (e) {
-        //     e.preventDefault();
-        //     var formData = $(this).serialize();
-        //     $.ajax({
-        //         type: 'GET',
-        //         url: '{{ route("update.restock") }}',
-        //         data: formData,
-        //         success: function (response) {
-        //             $('#updateStatusModal').modal('hide');
-        //             // location.reload();
-        //             console.log(response)
-        //         },
-        //         error: function (xhr, status, error) {
-        //             // Handle errors
-        //             console.log(xhr)
-        //         }
-        //     });
-        // });
     </script>
 @endpush
 @endsection

@@ -66,6 +66,6 @@ class RestockController extends Controller
         $po->save();
 
         $request->session()->flash('info', 'Request berhasil disetujui!');
-        return redirect('/admin/data/bahan/variant/restock');
+        return redirect('/admin/data/bahan/variant');
     }
 }

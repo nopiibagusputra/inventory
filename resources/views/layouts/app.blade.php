@@ -31,6 +31,9 @@
     <link rel="stylesheet" href="{{ url('lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="{{ url('lte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')}}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ url('lte/plugins/select2/css/select2.min.css')}}">
+    <link rel="stylesheet" href="{{ url('lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
     <style>
       .sidebar-divider {
         border-top: 1px solid #b1a2a2;
@@ -106,6 +109,13 @@
   <script src="{{ url('lte/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
   <!-- SweetAlert2 -->
   <script src="{{ url('lte/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
+  <!-- Select2 -->
+  <script src="{{ url('lte/plugins/select2/js/select2.full.min.js')}}"></script>
+  <!-- Bootstrap4 Duallistbox -->
+  <script src="{{ url('lte/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js')}}"></script>
+  <!-- InputMask -->
+  <script src="{{ url('lte/plugins/moment/moment.min.js')}}"></script>
+  <script src="{{ url('lte/plugins/inputmask/jquery.inputmask.min.js')}}"></script>
   <!-- AdminLTE App -->
   <script src="{{ url('lte/dist/js/adminlte.js')}}"></script>
   @stack('scripts')

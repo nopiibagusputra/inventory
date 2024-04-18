@@ -11,9 +11,8 @@ class StockOuts extends Model
 
     protected $fillable = [
         'kode_pemesanan',
-        'productId',
-        'variantId',
         'userId',
+        'variantId',
         'stock',
     ];
 }

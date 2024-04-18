@@ -38,7 +38,7 @@
                         <div class="card-header">
                             <h3 class="card-title">Daftar Barang Keluar</h3>
                             <button type="button" class="btn btn-sm btn-primary float-right" data-toggle="modal"
-                                data-target="#tambahSupplier">
+                                data-target="#formoutModal">
                                 Form Pengeluaran
                             </button>
                         </div>
@@ -48,8 +48,7 @@
                                 <thead>
                                     <tr>
                                         <th style="text-align: center">Kode Pemesanan</th>
-                                        <th>Product</th>
-                                        <th>Variant</th>
+                                        <th>Bahan Baku</th>
                                         <th style="text-align: center">Jumlah</th>
                                         <th style="text-align: center">Request By</th>                                        
                                     </tr>
@@ -58,10 +57,9 @@
                                     @foreach($data as $item)
                                         <tr>
                                             <td style="text-align: center">{{ $item->kode_pemesanan }}</td>
-                                            <td>{{ $item->namaProduct }}</td>
-                                            <td>{{ $item->namaVariant }}</td>
+                                            <td>{{ $item->namaProduct.' '.$item->namaVariant }}</td>
                                             <td style="text-align: center">{{ $item->stock }}</td>
-                                            <td style="text-align: center">{{ $item->stock }}</td>                                            
+                                            <td style="text-align: center">{{ $item->nama_karyawan }}</td>                                            
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -81,6 +79,44 @@
 </div>
 <!-- /.content-wrapper -->
 
+<div class="modal fade" id="formoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Form Permintaan Bahan Keluar</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Form for adding new material -->
+          <form method="POST" action="{{ route('store.out') }}">
+            @csrf
+            <div class="form-group">
+              <label>Nama Bahan Baku</label>
+              <input type="hidden" id="userId" name="userId" value="{{ Auth::user()->id_user }}">
+              <input type="hidden" id="variantId" name="variantId" value="">
+              <select name="bahan" id="bahan" class="form-control" style="width: 100%;">
+                <option disabled>Nama Variant</option>
+                @foreach ($bahan as $item)
+                    <option value="{{ $item->idVariant }}">{{ $item->namaProduct.' '.$item->namaVariant }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="jumlah">Jumlah</label>
+              <input type="number" class="form-control" id="jumlah" name="jumlah" placeholder="Masukkan Jumlah Bahan Baku" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Kirim</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
 @push('scripts')
     <script>
         $(function () {
@@ -93,6 +129,28 @@
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
 
+    </script>
+    <script>
+        $(function () {
+          //Initialize Select2 Elements
+          $('.select2').select2()
+      
+          //Initialize Select2 Elements
+          $('.select2bs4').select2({
+            theme: 'bootstrap4'
+          })
+        })
+    </script>
+    <script>
+       document.addEventListener("DOMContentLoaded", function() {
+        var bahanDropdown = document.getElementById("bahan");
+        var variantIdInput = document.getElementById("variantId");
+
+        bahanDropdown.addEventListener("change", function() {
+            var selectedOption = bahanDropdown.options[bahanDropdown.selectedIndex];
+            variantIdInput.value = selectedOption.value;
+        });
+    });
     </script>
 @endpush
 @endsection

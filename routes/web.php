@@ -33,6 +33,7 @@ Route::middleware('auth', 'validatelevels:admin')->group(function () {
     Route::post('admin/data/bahan/variant', [Admin\VariantController::class, 'storeVariant'])->name('store.variant');
     Route::post('admin/data/bahan/suppliers', [Admin\SupplierController::class, 'storeSuppliers'])->name('store.suppliers');
     Route::post('admin/data/bahan/variant/restock', [Admin\RestockController::class, 'requestRestock'])->name('request.restock');
+    Route::post('admin/data/bahan/variant/out', [Admin\StockOutController::class, 'storeOut'])->name('store.out');
 
     Route::put('admin/data/bahan', [Admin\ProductController::class, 'updateBahanBaku'])->name('update.bahan');
     Route::put('admin/data/bahan/variant', [Admin\VariantController::class, 'updateVariant'])->name('update.variant');

@@ -58,7 +58,7 @@ class SafetyStockController extends Controller
         return $safetyStocks;
     }
 
-    public function updateSafetyStock()
+    public function updateSafetyStock(Request $request)
     {
         // Panggil fungsi safetyStock untuk mendapatkan nilai safety stock untuk setiap variantId
         $safetyStocks = $this->safetyStock();
@@ -70,5 +70,8 @@ class SafetyStockController extends Controller
                 ->where('id', $variantId)
                 ->update(['safetystock' => $safetyStock]);
         }
+
+        $request->session()->flash('info', 'Safety Stock berhasil dikalkulasi!');
+        return redirect('/admin/dashboard');
     }
 }

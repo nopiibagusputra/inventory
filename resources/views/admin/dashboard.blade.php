@@ -24,6 +24,12 @@
     <!-- /.content-header -->
     <!-- Main content -->
     <section class="content">
+        @if(session('info') || session('error'))
+        <div class="alert alert-{{ session('info') ? 'success' : 'danger' }} alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {{ session('info') ?? session('error') }}
+        </div>
+        @endif
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div class="row">
@@ -94,15 +100,44 @@
                 <!-- Left col -->
                 <section class="col-lg-7 connectedSortable">
                     <!-- Custom tabs (Charts with tabs)-->
-                    <a href="{{ route('update.safety.stock') }}" class="btn btn-primary">Update Safety Stock</a>
+                    <div class="card">
+                        <div class="card-header">
+                          <h3 class="card-title">Daftar Peringatan Stock Bahan Baku</h3>
+                          <a href="{{ route('update.safety.stock') }}" class="btn btn-primary btn-sm float-right">Update Safety Stock</a>
 
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                          <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr style="text-align: center">
+                              <th>Produk</th>
+                              <th>Stock</th>
+                              <th >Safety Stock</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($data as $item)
+                                    <tr style="text-align: center">
+                                        <td>{{$item->namaProduct.' '.$item->namaVariant.' '.$item->satuanProduct}}</td>
+                                        <td style="background-color: {{ $item->safetystock !== null && $item->safetystock > 0 ? 'red' : 'transparent' }}; color: {{ $item->safetystock !== null && $item->safetystock > 0 ? 'white' : 'black' }}">{{$item->stock}}</td>
+                                        <td >
+                                            {{ $item->safetystock !== null ? $item->safetystock : 0 }}
+                                        </td>
+                                    </tr>                                    
+                                @endforeach
+                            </tbody>
+                          </table>
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
                 </section>
                 <!-- /.Left col -->
                 <!-- right col (We are only adding the ID to make the widgets sortable)-->
-                <section class="col-lg-5 connectedSortable">
+                {{-- <section class="col-lg-5 connectedSortable">
 
                     
-                </section>
+                </section> --}}
                 <!-- right col -->
             </div>
             <!-- /.row (main row) -->
@@ -111,4 +146,19 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+
+@push('scripts')
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": true,
+                "ordering": false,
+                "buttons": ["copy", "excel", "pdf", "print"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+
+    </script>
+@endpush
 @endsection

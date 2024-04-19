@@ -94,7 +94,8 @@
                 <!-- Left col -->
                 <section class="col-lg-7 connectedSortable">
                     <!-- Custom tabs (Charts with tabs)-->
-                    
+                    <a href="{{ route('update.safety.stock') }}" class="btn btn-primary">Update Safety Stock</a>
+
                 </section>
                 <!-- /.Left col -->
                 <!-- right col (We are only adding the ID to make the widgets sortable)-->

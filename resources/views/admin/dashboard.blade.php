@@ -119,10 +119,10 @@
                             <tbody>
                                 @foreach ($data as $item)
                                     <tr style="text-align: center">
-                                        <td>{{$item->namaProduct.' '.$item->namaVariant.' '.$item->satuanProduct}}</td>
-                                        <td style="background-color: {{ $item->safetystock !== null && $item->safetystock > 0 ? 'red' : 'transparent' }}; color: {{ $item->safetystock !== null && $item->safetystock > 0 ? 'white' : 'black' }}">{{$item->stock}}</td>
+                                        <td>{{$item->namaProduct.' '.$item->namaVariant}}</td>
+                                        <td style="background-color: {{ $item->safetystock !== null && $item->safetystock > 0 ? 'red' : 'transparent' }}; color: {{ $item->safetystock !== null && $item->safetystock > 0 ? 'white' : 'black' }}">{{$item->stock.' '.$item->satuanProduct}}</td>
                                         <td >
-                                            {{ $item->safetystock !== null ? $item->safetystock : 0 }}
+                                            {{ $item->safetystock !== null ? $item->safetystock.' '.$item->satuanProduct : 0 }}
                                         </td>
                                     </tr>                                    
                                 @endforeach

@@ -42,12 +42,12 @@
                         <div class="card-body">
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
-                                    <tr>
-                                        <th style="text-align: center">Product</th>
-                                        <th>Nama Variant</th>
-                                        <th style="text-align: center">Stock</th>
-                                        <th style="text-align: center">Harga</th>
-                                        <th style="text-align: center">Action</th>
+                                    <tr style="text-align: center">
+                                        <th >Product</th>
+                                        <th >Stock</th>
+                                        <th >Safety Stock</th>
+                                        <th >Harga</th>
+                                        <th >Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -57,9 +57,9 @@
                                     @endphp
                                     @foreach($data as $item)
                                         <tr>
-                                            <td style="text-align: center; font-weight: bold">{{ $item->nama_produk }}</td>
-                                            <td>{{ $item->nama_variant }}</td>
-                                            <td style="text-align: center">{{ $item->stock_variant }}</td>
+                                            <td style="font-weight: bold">{{ $item->nama_produk.' '.$item->nama_variant }}</td>
+                                            <td style="text-align: center">{{ $item->stock_variant.' '.$item->satuan }}</td>
+                                            <td style="text-align: center">{{ $item->safety_stock.' '.$item->satuan }}</td>
                                             <td>Rp {{ number_format($item->harga_variant, 0, ',', '.') }}</td>
                                             <td style="text-align: center">
                                                 <button type="button" class="btn btn-sm btn-success restock"

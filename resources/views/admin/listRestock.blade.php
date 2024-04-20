@@ -59,7 +59,7 @@
                                             <td style="text-align: center">{{ $item->kode_pemesanan }}</td>
                                             <td>{{ $item->namaProduct }}</td>
                                             <td>{{ $item->namaVariant }}</td>
-                                            <td style="text-align: center">{{ $item->stock }}</td>
+                                            <td style="text-align: center">{{ $item->stock.' '.$item->satuan }}</td>
                                             <td>Rp {{ number_format($item->total_harga, 0, ',', '.') }}</td>
                                             <td style="text-align: center">
                                                 @if($item->status == 0)

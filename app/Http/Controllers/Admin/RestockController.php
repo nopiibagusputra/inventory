@@ -11,7 +11,7 @@ use App\Models\Variants;
 class RestockController extends Controller
 {
     public function listRestock(){
-        $data = Restocks::select('products.id as idProduct', 'products.nama as namaProduct', 'variants.id as idVariant', 'variants.id as idVariant', 'variants.nama as namaVariant', 'user.id_user as idUser', 'user.nama_karyawan as userName', 'restocks.*')
+        $data = Restocks::select('products.id as idProduct', 'products.satuan as satuan', 'products.nama as namaProduct', 'variants.id as idVariant', 'variants.id as idVariant', 'variants.nama as namaVariant', 'user.id_user as idUser', 'user.nama_karyawan as userName', 'restocks.*')
                         ->join('products', 'products.id', '=', 'restocks.productId')
                         ->join('variants', 'variants.id', '=', 'restocks.variantId')
                         ->join('user', 'user.id_user', '=', 'restocks.userId')

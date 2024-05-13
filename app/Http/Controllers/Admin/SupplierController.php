@@ -17,15 +17,37 @@ class SupplierController extends Controller
         ]);
     }
 
+    public function generateKodePerusahaan($namaPerusahaan) {
+        $words = explode(' ', $namaPerusahaan);
+        $secondWord = isset($words[1]) ? $words[1] : '';
+    
+        $code = strtoupper(substr($secondWord, 0, 4));
+    
+        if (strlen($code) < 4 && isset($words[0])) {
+            $firstWord = $words[0];
+            $code .= strtoupper(substr($firstWord, 0, 4 - strlen($code)));
+        }
+
+        $suffix = '';
+        $counter = 1;
+        while (Suppliers::where('kode', $code . $suffix)->exists()) {
+            $suffix = strval($counter);
+            $counter++;
+        }
+    
+        return $code . $suffix;
+    }
+
     public function storeSuppliers(Request $request){
         $this->validate($request, [
             'supplierName' =>'required',
-            'supplierKode' =>'required',
             'supplierAlamat' =>'required'
         ]);
 
+        $kodePerusahaan = $this->generateKodePerusahaan($request->supplierName);
+
         Suppliers::create([
-            'kode' => $request->supplierKode,
+            'kode' => $kodePerusahaan,
             'nama'   => $request->supplierName,
             'alamat' => $request->supplierAlamat
         ]);
@@ -36,7 +58,6 @@ class SupplierController extends Controller
 
     public function updateSuppliers(Request $request){
         $data = Suppliers::findOrFail($request->supplier_id);
-        $data->kode = $request->supplierKode;
         $data->nama = $request->supplierName;
         $data->alamat = $request->supplierAlamat;
         $data->save();

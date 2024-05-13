@@ -101,11 +101,11 @@
                 <!-- Form for adding new material -->
                 <form method="POST" action="{{ route('store.suppliers') }}">
                     @csrf
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="supplierKode">Kode</label>
                         <input type="text" class="form-control" id="supplierKode" name="supplierKode"
                             placeholder="Contoh : PTA" required>
-                    </div>
+                    </div> --}}
                     <div class="form-group">
                         <label for="supplierName">Nama Supplier</label>
                         <input type="text" class="form-control" id="supplierName" name="supplierName"
@@ -141,10 +141,10 @@
                     @csrf
                     @method("PUT")
                     <input type="hidden" name="supplier_id" id="supplier_id">
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="edit_supplierKode">Kode</label>
                         <input type="text" class="form-control" id="edit_supplierKode" name="supplierKode" required>
-                    </div>
+                    </div> --}}
                     <div class="form-group">
                         <label for="edit_supplierName">Nama Supplier</label>
                         <input type="text" class="form-control" id="edit_supplierName" name="supplierName" required>

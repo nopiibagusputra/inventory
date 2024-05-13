@@ -20,6 +20,8 @@ class SupplierSeeds extends Seeder
             'kode' => 'PTA',
             'nama' => 'PT Swasembada Asia',
             'alamat' => 'Surabaya',
+            'nama_kontak' => 'Toddi',
+            'telp' => '0891235678',
             'created_by' => 1,
         ]);
 
@@ -27,6 +29,8 @@ class SupplierSeeds extends Seeder
             'kode' => 'PTM',
             'nama' => 'PT Mikatasa Tenggara',
             'alamat' => 'Surabaya',
+            'nama_kontak' => 'Bima',
+            'telp' => '0891235678',
             'created_by' => 1,
         ]);
 
@@ -34,6 +38,8 @@ class SupplierSeeds extends Seeder
             'kode' => 'AVA',
             'nama' => 'PT Aman Sentosa Abadi',
             'alamat' => 'Surabaya',
+            'nama_kontak' => 'Aldo',
+            'telp' => '0891235678',
             'created_by' => 1,
         ]);
     }

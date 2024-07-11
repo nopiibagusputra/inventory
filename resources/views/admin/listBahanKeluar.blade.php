@@ -50,7 +50,8 @@
                                         <th style="text-align: center">Kode Pemesanan</th>
                                         <th>Bahan Baku</th>
                                         <th style="text-align: center">Jumlah</th>
-                                        <th style="text-align: center">Request By</th>                                        
+                                        <th style="text-align: center">Request By</th> 
+                                        <th style="text-align: right">Request Date</th>                                       
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -59,7 +60,8 @@
                                             <td style="text-align: center">{{ $item->kode_pemesanan }}</td>
                                             <td>{{ $item->namaProduct.' '.$item->namaVariant }}</td>
                                             <td style="text-align: center">{{ $item->stock }}</td>
-                                            <td style="text-align: center">{{ $item->nama_karyawan }}</td>                                            
+                                            <td style="text-align: center">{{ $item->nama_karyawan }}</td>    
+                                            <td style="text-align: right">{{ $item->created_at }}</td>                                        
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -93,15 +95,19 @@
           <form method="POST" action="{{ route('store.out') }}">
             @csrf
             <div class="form-group">
-              <label>Nama Bahan Baku</label>
-              <input type="hidden" id="userId" name="userId" value="{{ Auth::user()->id_user }}">
-              <input type="hidden" id="variantId" name="variantId" value="">
-              <select name="bahan" id="bahan" class="form-control" style="width: 100%;">
-                <option disabled>Nama Variant</option>
-                @foreach ($bahan as $item)
-                    <option value="{{ $item->idVariant }}">{{ $item->namaProduct.' '.$item->namaVariant }}</option>
+                <label>Nama Bahan Baku</label>
+                <input type="hidden" id="userId" name="userId" value="{{ Auth::user()->id_user }}">
+                <input type="hidden" id="variantId" name="variantId" value="">
+                <select name="bahan" id="bahan" class="form-control" style="width: 100%;">
+                <option disabled selected>Pilih Nama Produk</option>
+                @foreach ($products as $item)
+                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
                 @endforeach
-              </select>
+                </select>
+                <br>
+                <select name="variant" id="variant" class="form-control" style="width: 100%;">
+                    <option disabled selected>Pilih Nama Variant</option>
+                </select>
             </div>
             <div class="form-group">
               <label for="jumlah">Jumlah</label>
@@ -150,6 +156,34 @@
             var selectedOption = bahanDropdown.options[bahanDropdown.selectedIndex];
             variantIdInput.value = selectedOption.value;
         });
+    });
+    </script>
+    <script>
+    $(document).ready(function() {
+        $('#bahan').on('change', function() {
+            var productId = $(this).val();
+            var variantSelect = $('#variant');
+    
+            // Clear existing options
+            variantSelect.empty();
+            variantSelect.append('<option disabled selected>Pilih Nama Variant</option>');
+    
+            if (productId) {
+                $.ajax({
+                    url: "{{ url('/admin/data/bahan/variant/getData') }}/" + productId,
+                    method: 'GET',
+                    success: function(data) {
+                        $.each(data, function(index, variant) {
+                            variantSelect.append('<option value="' + variant.idVariant + '">' + variant.namaVariant + ' (Stock: ' + variant.stockVariant + ')</option>');
+                        });
+                    }
+                });
+            }
+        });
+        $('#variant').on('change', function() {
+        var selectedVariantId = $(this).val();
+        $('#variantId').val(selectedVariantId);
+    });
     });
     </script>
 @endpush

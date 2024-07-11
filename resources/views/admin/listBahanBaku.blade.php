@@ -102,7 +102,7 @@
           <form method="POST" action="{{ route('store.bahan') }}">
             @csrf
             <div class="form-group">
-              <label>Select</label>
+              <label>Supplier</label>
               <select name="supplierId" class="form-control">
                 <option disabled>Pilih Supplier</option>
                 @foreach ($supplier as $item)

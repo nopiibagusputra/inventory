@@ -21,10 +21,21 @@ class StockOutController extends Controller
                                 ->join('products', 'products.id', '=', 'variants.productId')
                                 ->get();
 
+        $products = Products::all();
         return view('admin.listBahanKeluar', [
             'data' => $data,
-            'bahan' => $bahan_baku
+            'bahan' => $bahan_baku,
+            'products' => $products
         ]); 
+    }
+
+    public function getVariants($productId)
+    {
+        $variants = Variants::select('variants.id as idVariant', 'variants.nama as namaVariant', 'variants.stock as stockVariant')
+                            ->where('productId', $productId)
+                            ->get();
+
+        return response()->json($variants);
     }
 
     public function storeOut(Request $request){

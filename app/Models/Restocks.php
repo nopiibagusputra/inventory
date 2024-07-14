@@ -15,6 +15,7 @@ class Restocks extends Model
         'variantId',
         'userId',
         'stock',
+        'stock_in',
         'total_harga',
         'lead_time',
         'status',

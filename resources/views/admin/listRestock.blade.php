@@ -47,6 +47,7 @@
                                         <th>Product</th>
                                         <th>Variant</th>
                                         <th style="text-align: center">Request</th>
+                                        <th style="text-align: center">Request In</th>
                                         <th>Total Harga</th>
                                         <th style="text-align: center">Status</th>
                                         <th>Catatan</th>
@@ -60,6 +61,7 @@
                                             <td>{{ $item->namaProduct }}</td>
                                             <td>{{ $item->namaVariant }}</td>
                                             <td style="text-align: center">{{ $item->stock.' '.$item->satuan }}</td>
+                                            <td style="text-align: center">{{ $item->stock_in.' '.$item->satuan }}</td>
                                             <td>Rp {{ number_format($item->total_harga, 0, ',', '.') }}</td>
                                             <td style="text-align: center">
                                                 @if($item->status == 0)
@@ -72,14 +74,14 @@
                                             </td>
                                             <td>{{ $item->notes }}</td>
                                             <td style="text-align: center">
-                                                @if($item->status == 1 OR $item->status == 2)
+                                                @if($item->status == 1)
                                                     <button type="button" disabled class="btn btn-sm btn-danger">
                                                         Sudah Validasi
                                                     </button>
                                                 @else
-                                                    <button type="button" class="btn btn-sm btn-info variant-button validasi" data-toggle="modal" data-target="#updateStatusModal" data-kode="{{ $item->kode_pemesanan }}" data-variantid="{{ $item->idVariant }}" data-variant="{{ $item->namaVariant }}" data-product="{{ $item->namaProduct}}">
+                                                    <button type="button" class="btn btn-sm btn-info variant-button validasi" data-toggle="modal" data-target="#updateStatusModal" data-kode="{{ $item->kode_pemesanan }}" data-variantid="{{ $item->idVariant }}" data-variant="{{ $item->namaVariant }}" data-product="{{ $item->namaProduct }}" data-jumlah="{{ $item->stock }}" data-kondisi="{{ $item->kondisi }}" data-catatan="{{ $item->notes }}">
                                                         Update Status
-                                                    </button>
+                                                    </button>                                                
                                                 @endif
                                             </td>
                                         </tr>
@@ -120,6 +122,10 @@
                     <div class="form-group">
                         <label for="namaBarang">Nama Barang</label>
                         <input type="text" class="form-control" id="namaBarang" name="namaBarang" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="permintaanBarang">Jumlah Permintaan Barang</label>
+                        <input type="number" class="form-control" id="permintaanBarang" name="permintaanBarang" disabled>
                     </div>
                     <div class="form-group">
                         <label for="jumlahBarang">Jumlah Barang Datang*</label>
@@ -166,10 +172,16 @@
             var product = $(this).data('product');
             var variant = $(this).data('variant');
             var variantId = $(this).data('variantid');
-
+            var jumlah = $(this).data('jumlah');
+            var kondisi = $(this).data('kondisi');
+            var catatan = $(this).data('catatan');
+    
             $('#kode').val(kode);
             $('#variantId').val(variantId);
-            $('#namaBarang').val(product+' '+variant);
+            $('#namaBarang').val(product + ' ' + variant);
+            $('#permintaanBarang').val(jumlah);
+            $('#kondisiBarang').val(kondisi);
+            $('#catatan').val(catatan);
         });
     </script>
 @endpush

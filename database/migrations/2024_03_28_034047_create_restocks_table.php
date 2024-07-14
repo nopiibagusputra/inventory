@@ -20,6 +20,7 @@ class CreateRestocksTable extends Migration
             $table->unsignedBigInteger('variantId');
             $table->unsignedBigInteger('userId');
             $table->integer('stock');
+            $table->integer('stock_in');
             $table->integer('lead_time');
             $table->integer('total_harga');
             $table->smallInteger('status')->default(0); //0 in progress, 1 valid, 2 invalid

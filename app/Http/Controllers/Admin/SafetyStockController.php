@@ -25,34 +25,35 @@ class SafetyStockController extends Controller
 
         // Ambil data waktu tunggu maksimum dan rata-rata dari tabel restock
         $maxLeadTime = DB::table('restocks')
-            ->select('variantId as variantLeadTime', DB::raw('MAX(lead_time) as max_lead_time'))
+            ->select('variantId', DB::raw('MAX(lead_time) as max_lead_time'))
             ->groupBy('variantId')
             ->get();
 
         $avgLeadTime = DB::table('restocks')
-            ->select('variantId as variantLeadTime', DB::raw('FLOOR(AVG(lead_time)) as avg_lead_time'))
+            ->select('variantId', DB::raw('FLOOR(AVG(lead_time)) as avg_lead_time'))
             ->groupBy('variantId')
             ->get();
-
-            // dd($maxLeadTime);
-       
 
         // Hitung safety stock untuk setiap variantId
         $safetyStocks = [];
         foreach ($maxDailySales as $maxSale) {
             $variantId = $maxSale->variantId;
             $maxSales = $maxSale->max_daily_sales;
-            $avgSales = $avgDailySales->where('variantId', $variantId)->first()->avg_daily_sales;
-            $maxLeadTimeVariant = $maxLeadTime->where('variantLeadTime', $variantId)->first();
+
+            // Pastikan data rata-rata penjualan harian ditemukan
+            $avgSalesData = $avgDailySales->where('variantId', $variantId)->first();
+            $avgSales = $avgSalesData ? $avgSalesData->avg_daily_sales : 0;
+
+            // Pastikan data waktu tunggu maksimum dan rata-rata ditemukan
+            $maxLeadTimeVariant = $maxLeadTime->where('variantId', $variantId)->first();
             $maxTime = $maxLeadTimeVariant ? $maxLeadTimeVariant->max_lead_time : 0;
 
-            $avgTimeVariant = $avgLeadTime->where('variantLeadTime', $variantId)->first();
+            $avgTimeVariant = $avgLeadTime->where('variantId', $variantId)->first();
             $avgTime = $avgTimeVariant ? $avgTimeVariant->avg_lead_time : 0;
 
-            
+            // Kalkulasi safety stock
             $safetyStock = ($maxSales * $maxTime) - ($avgSales * $avgTime);
             $safetyStocks[$variantId] = $safetyStock;
-            // dd($maxDailySales);
         }
 
         return $safetyStocks;

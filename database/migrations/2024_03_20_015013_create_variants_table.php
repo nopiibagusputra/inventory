@@ -20,7 +20,7 @@ class CreateVariantsTable extends Migration
             $table->string('nama', 100);
             $table->integer('stock');
             $table->integer('harga');
-            $table->integer('safetystock');
+            $table->integer('safetystock')->default(10);
             $table->userstamps();
             $table->timestamps();
 

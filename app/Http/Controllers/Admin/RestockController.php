@@ -55,17 +55,32 @@ class RestockController extends Controller
     public function approveRestock(Request $request){
         $stock_lama = Variants::where('id', $request->variantId)->first();
         $stock_baru = $stock_lama->stock + $request->jumlahBarang;
-
-        $data = Variants::where('id', $request->variantId)->first();
-        $data->stock = $stock_baru;
-        $data->save();
-
         $po = Restocks::where('kode_pemesanan', $request->kode)->first();
-        $po->status = $request->kondisiBarang;
-        $po->notes  = $request->catatan;
-        $po->save();
 
-        $request->session()->flash('info', 'Request berhasil disetujui!');
-        return redirect('/admin/data/bahan/variant');
+        if($request->kondisiBarang == 2 && $po->stock != $request->jumlahBarang){
+            $po = Restocks::where('kode_pemesanan', $request->kode)->first();
+            $po->status = $request->kondisiBarang;
+            $po->stock_in = $request->jumlahBarang;
+            $po->notes  = $request->catatan;
+            $po->save();
+
+            $request->session()->flash('info', 'Request berhasil divalidasi! dengan catatan');
+            return redirect('/admin/data/bahan/variant/restock');
+        }else {
+            $data = Variants::where('id', $request->variantId)->first();
+            $data->stock = $stock_baru;
+            $data->save();
+    
+            $po->status = $request->kondisiBarang;
+            $po->stock_in = $request->jumlahBarang;
+            $po->notes  = null;
+            $po->save();
+            
+            $request->session()->flash('info', 'Request berhasil disetujui!');
+            return redirect('/admin/data/bahan/variant');
+        }
+
+
+       
     }
 }

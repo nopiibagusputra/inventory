@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Restocks;
 use App\Models\Products;
 use App\Models\Variants;
+use App\Models\Variant_details;
+use DB;
 
 class RestockController extends Controller
 {
@@ -67,6 +69,16 @@ class RestockController extends Controller
             $request->session()->flash('info', 'Request berhasil divalidasi! dengan catatan');
             return redirect('/admin/data/bahan/variant/restock');
         }else {
+
+            // Create variant_detail entries based on the stock value
+            for ($i = 0; $i < $request->jumlahBarang; $i++) {
+                DB::table('variant_detail')->insert([
+                    'variantsId' => $request->variantId,
+                    'item_in' => date('Ymd'),
+                    'status' => 'in',
+                ]);
+            }
+
             $data = Variants::where('id', $request->variantId)->first();
             $data->stock = $stock_baru;
             $data->save();

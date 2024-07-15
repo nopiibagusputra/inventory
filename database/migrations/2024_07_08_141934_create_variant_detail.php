@@ -20,6 +20,7 @@ class CreateVariantDetail extends Migration
             $table->dateTime('item_out')->nullable();
             $table->string('status')->nullable(); // out = item not out, in = item out
             $table->foreign('variantsId')->references('id')->on('variants')->onDelete('cascade');
+            $table->timestamps();
         });
         
     }

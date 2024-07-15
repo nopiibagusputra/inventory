@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\StockOuts;
 use App\Models\Products;
 use App\Models\Variants;
+use App\Models\Variant_details;
+use Carbon\Carbon;
 
 class StockOutController extends Controller
 {
@@ -38,43 +40,63 @@ class StockOutController extends Controller
         return response()->json($variants);
     }
 
-    public function storeOut(Request $request){
+    public function storeOut(Request $request)
+    {
         $this->validate($request, [
-            'jumlah' =>'required',
-            'variantId'  =>'required',
-            'userId' =>'required'
+            'jumlah' => 'required|integer|min:1',
+            'variantId' => 'required|exists:variants,id',
+            'userId' => 'required|exists:user,id_user'
         ]);
 
-        $tanggal = date('Ymd');
-        $waktu = date('His');
-        $total_harga = $request->variantPrice * $request->restock;
-        $kodePemesanan = "SO-".$request->userId.$request->variantId."-" . str_pad($tanggal, 8, '0', STR_PAD_RIGHT) . str_pad($waktu, 6, '0', STR_PAD_RIGHT);
+        $variant = Variants::find($request->variantId);
+        $jumlah = $request->jumlah;
+        $validasi = $variant->stock - $jumlah;
 
-        $variant = Variants::where('id', $request->variantId)->first();
-        $validasi = $variant->stock - $request->jumlah;
-
-        if($validasi <= 0){
+        if ($validasi < 0) {
             $request->session()->flash('info', 'Gagal, Stock kurang!');
             return redirect('/admin/data/bahan/variant/out');
         }
 
+        // Mencari data variant_details yang sesuai
+        $details = Variant_details::where('variantsId', $request->variantId)
+            ->where('status', '!=', 'out')
+            ->orderBy('item_in', 'asc')
+            ->take($jumlah)
+            ->get();
+
+        // Mengurangi stock pada tabel variants
         $variant->stock = $validasi;
         $variant->save();
 
-        if($variant){
-            StockOuts::create([
-                'userId' => $request->userId,
-                'kode_pemesanan' => $kodePemesanan,
-                'variantId' => $request->variantId,
-                'stock' => $request->jumlah,
-            ]);
+        $updatedCount = 0;
 
-            $request->session()->flash('info', 'Request berhasil dikirim!');
-            return redirect('/admin/data/bahan/variant/out');
+        // Update status dan date_item_out
+        foreach ($details as $detail) {
+            $detail->status = 'out';
+            $detail->item_out = Carbon::now();
+            $detail->save();
+            $updatedCount++;
+            if ($updatedCount >= $jumlah) {
+                break;
+            }
         }
 
-        $request->session()->flash('info', 'Request gagal dikirim!');
-        return redirect('/admin/data/bahan/variant/out');
+        // Logika tambahan untuk mengupdate stock_outs jika diperlukan
+        StockOuts::create([
+            'userId' => $request->userId,
+            'kode_pemesanan' => $this->generateKodePemesanan($request->userId, $request->variantId),
+            'variantId' => $request->variantId,
+            'stock' => $jumlah,
+        ]);
 
+        $request->session()->flash('info', 'Request berhasil dikirim!');
+        return redirect('/admin/data/bahan/variant/out');
+    }
+
+    private function generateKodePemesanan($userId, $variantId)
+    {
+        $tanggal = date('Ymd');
+        $waktu = date('His');
+        return "SO-".$userId.$variantId."-".str_pad($tanggal, 8, '0', STR_PAD_RIGHT).str_pad($waktu, 6, '0', STR_PAD_RIGHT);
     }
 }

@@ -12,47 +12,33 @@ class SafetyStockController extends Controller
 {
     public function safetyStock()
     {
-        // Ambil data penjualan harian maksimum dan rata-rata dari tabel stock_outs
-        $maxDailySales = DB::table('stock_outs')
-            ->select('variantId', DB::raw('MAX(stock) as max_daily_sales'))
-            ->groupBy('variantId')
-            ->get();
-
-        $avgDailySales = DB::table('stock_outs')
-            ->select('variantId', DB::raw('FLOOR(AVG(stock)) as avg_daily_sales'))
+        // Ambil data penjualan harian maksimum, rata-rata, dan standar deviasi dari tabel stock_outs
+        $dailySalesStats = DB::table('stock_outs')
+            ->select('variantId', DB::raw('MAX(stock) as max_daily_sales'), DB::raw('FLOOR(AVG(stock)) as avg_daily_sales'), DB::raw('STDDEV(stock) as stddev_daily_sales'))
             ->groupBy('variantId')
             ->get();
 
         // Ambil data waktu tunggu maksimum dan rata-rata dari tabel restock
-        $maxLeadTime = DB::table('restocks')
-            ->select('variantId', DB::raw('MAX(lead_time) as max_lead_time'))
+        $leadTimeStats = DB::table('restocks')
+            ->select('variantId', DB::raw('MAX(lead_time) as max_lead_time'), DB::raw('FLOOR(AVG(lead_time)) as avg_lead_time'))
             ->groupBy('variantId')
             ->get();
 
-        $avgLeadTime = DB::table('restocks')
-            ->select('variantId', DB::raw('FLOOR(AVG(lead_time)) as avg_lead_time'))
-            ->groupBy('variantId')
-            ->get();
+        // Tentukan Z-value berdasarkan service level (misalnya, 1.65 untuk 95% service level)
+        $serviceLevelZ = 1.65;
 
         // Hitung safety stock untuk setiap variantId
         $safetyStocks = [];
-        foreach ($maxDailySales as $maxSale) {
-            $variantId = $maxSale->variantId;
-            $maxSales = $maxSale->max_daily_sales;
-
-            // Pastikan data rata-rata penjualan harian ditemukan
-            $avgSalesData = $avgDailySales->where('variantId', $variantId)->first();
-            $avgSales = $avgSalesData ? $avgSalesData->avg_daily_sales : 0;
+        foreach ($dailySalesStats as $salesStats) {
+            $variantId = $salesStats->variantId;
+            $stddevSales = $salesStats->stddev_daily_sales;
 
             // Pastikan data waktu tunggu maksimum dan rata-rata ditemukan
-            $maxLeadTimeVariant = $maxLeadTime->where('variantId', $variantId)->first();
-            $maxTime = $maxLeadTimeVariant ? $maxLeadTimeVariant->max_lead_time : 0;
+            $leadTimeStat = $leadTimeStats->where('variantId', $variantId)->first();
+            $avgTime = $leadTimeStat ? $leadTimeStat->avg_lead_time : 0;
 
-            $avgTimeVariant = $avgLeadTime->where('variantId', $variantId)->first();
-            $avgTime = $avgTimeVariant ? $avgTimeVariant->avg_lead_time : 0;
-
-            // Kalkulasi safety stock
-            $safetyStock = ($maxSales * $maxTime) - ($avgSales * $avgTime);
+            // Kalkulasi safety stock menggunakan standar deviasi dan service level
+            $safetyStock = $serviceLevelZ * $stddevSales * sqrt($avgTime);
             $safetyStocks[$variantId] = $safetyStock;
         }
 

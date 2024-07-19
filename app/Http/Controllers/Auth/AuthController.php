@@ -10,6 +10,9 @@ use Auth;
 class AuthController extends Controller
 {
     public function index(){
+        if (Auth::check()) {
+            return redirect(Auth::user()->level_user.'/dashboard');
+        }
         return view('login.index'); 
     }
 

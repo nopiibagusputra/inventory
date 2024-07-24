@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Products;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
+use DB;
 
 class ProductSeeds extends Seeder
 {
@@ -13,11 +15,25 @@ class ProductSeeds extends Seeder
      *
      * @return void
      */
+
+    
+
     public function run()
     {
+
+        function generatePrUniqueCode()
+        {
+            do {
+                $code = 'PR' . Str::upper(Str::random(2));
+            } while (Products::where('code', $code)->exists());
+
+            return $code;
+        }
+
         Schema::disableForeignKeyConstraints();
         Products::truncate();
         Products::create([
+'code' => generatePrUniqueCode(),
             'supplierId' => 1,
             'nama'      => 'Spons',
             'satuan' => 'Lembar',
@@ -25,6 +41,7 @@ class ProductSeeds extends Seeder
         ]);
 
         Products::create([
+'code' => generatePrUniqueCode(),
             'supplierId' => 1,
             'nama'      => 'Bisban',
             'satuan' => 'Meter',
@@ -32,6 +49,7 @@ class ProductSeeds extends Seeder
         ]);
 
         Products::create([
+'code' => generatePrUniqueCode(),
             'supplierId' => 2,
             'nama'      => 'Karung',
             'satuan' => 'Pcs',
@@ -39,6 +57,7 @@ class ProductSeeds extends Seeder
         ]);
 
         Products::create([
+'code' => generatePrUniqueCode(),
             'supplierId' => 3,
             'nama'      => 'Sol',
             'satuan' => 'Pasang',
@@ -46,6 +65,7 @@ class ProductSeeds extends Seeder
         ]);
 
         Products::create([
+'code' => generatePrUniqueCode(),
             'supplierId' => 3,
             'nama'      => 'Thinner',
             'satuan' => 'Kaleng',
@@ -53,6 +73,7 @@ class ProductSeeds extends Seeder
         ]);
 
         Products::create([
+'code' => generatePrUniqueCode(),
             'supplierId' => 3,
             'nama'      => 'Lem',
             'satuan' => 'Kaleng',
@@ -60,6 +81,7 @@ class ProductSeeds extends Seeder
         ]);
 
         Products::create([
+'code' => generatePrUniqueCode(),
             'supplierId' => 2,
             'nama'      => 'Cakar',
             'satuan' => 'Lembar',
@@ -67,6 +89,7 @@ class ProductSeeds extends Seeder
         ]);
 
         Products::create([
+'code' => generatePrUniqueCode(),
             'supplierId' => 1,
             'nama'      => 'Kabulon',
             'satuan' => 'Meter',
@@ -74,6 +97,7 @@ class ProductSeeds extends Seeder
         ]);
 
         Products::create([
+'code' => generatePrUniqueCode(),
             'supplierId' => 2,
             'nama'      => 'CCI',
             'satuan' => 'Meter',
@@ -81,6 +105,7 @@ class ProductSeeds extends Seeder
         ]);
 
         Products::create([
+'code' => generatePrUniqueCode(),
             'supplierId' => 2,
             'nama'      => 'Plastik',
             'satuan' => 'Pack',
@@ -88,6 +113,7 @@ class ProductSeeds extends Seeder
         ]);
 
         Products::create([
+'code' => generatePrUniqueCode(),
             'supplierId' => 1,
             'nama'      => 'Latex',
             'satuan' => 'Botol',

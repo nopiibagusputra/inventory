@@ -98,7 +98,7 @@
             <!-- Main row -->
             <div class="row">
                 <!-- Left col -->
-                <section class="col-lg-7 connectedSortable">
+                <section class="col-lg-6 connectedSortable">
                     <!-- Custom tabs (Charts with tabs)-->
                     <div class="card">
                         <div class="card-header">
@@ -132,6 +132,38 @@
                         <!-- /.card-body -->
                       </div>
                 </section>
+                <section class="col-lg-6 connectedSortable">
+                    <!-- Custom tabs (Charts with tabs)-->
+                    <div class="card">
+                        <div class="card-header">
+                          <h3 class="card-title">Daftar Stock Out</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                          <table id="stockOuts" class="table table-bordered table-striped">
+                            <thead>
+                            <tr style="text-align: center">
+                                <th>Nama Product</th>
+                                <th>Nama Variant</th>
+                                <th>Tanggal Keluar</th>
+                                <th>Total Terjual</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($stock_out as $stockOut)
+                                    <tr style="text-align: center">
+                                        <td>{{ $stockOut->nama_product }}</td>
+                                        <td>{{ $stockOut->nama_variant }}</td>
+                                        <td>{{ $stockOut->sale_date }}</td>
+                                        <td>{{ $stockOut->total_sold }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                          </table>
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+                </section>
                 <!-- /.Left col -->
                 <!-- right col (We are only adding the ID to make the widgets sortable)-->
                 {{-- <section class="col-lg-5 connectedSortable">
@@ -157,6 +189,18 @@
                 "ordering": false,
                 "buttons": ["copy", "excel", "pdf", "print"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+
+    </script>
+     <script>
+        $(function () {
+            $("#stockOuts").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": true,
+                "ordering": false,
+                "buttons": ["copy", "excel", "pdf", "print"]
+            }).buttons().container().appendTo('#stockOuts_wrapper .col-md-6:eq(0)');
         });
 
     </script>

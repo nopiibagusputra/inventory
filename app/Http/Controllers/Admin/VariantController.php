@@ -9,7 +9,7 @@ use App\Models\Variants;
 class VariantController extends Controller
 {
     public function listVariant(){
-        $data = Variants::select('products.nama as nama_produk', 'products.id as id_produk', 'products.satuan as satuan', 'variants.nama as nama_variant', 'variants.id as id_variant', 'variants.safetystock as safety_stock', 'variants.stock as stock_variant', 'variants.harga as harga_variant')
+        $data = Variants::select('variants.code','products.nama as nama_produk', 'products.id as id_produk', 'products.satuan as satuan', 'variants.nama as nama_variant', 'variants.id as id_variant', 'variants.safetystock as safety_stock', 'variants.stock as stock_variant', 'variants.harga as harga_variant')
                             ->join('products', 'products.id', '=', 'variants.productId')
                             ->get();
 

@@ -43,6 +43,7 @@
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                     <tr style="text-align: center">
+                                        <th>Item Code</th>
                                         <th >Product</th>
                                         <th >Stock</th>
                                         <th >Safety Stock</th>
@@ -57,6 +58,7 @@
                                     @endphp
                                     @foreach($data as $item)
                                         <tr>
+                                            <td style="text-align: center">{{ $item->code }}</td>
                                             <td style="font-weight: bold">{{ $item->nama_produk.' '.$item->nama_variant }}</td>
                                             <td style="text-align: center">{{ $item->stock_variant.' '.$item->satuan }}</td>
                                             <td style="text-align: center">{{ $item->safety_stock.' '.$item->satuan }}</td>

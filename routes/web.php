@@ -31,8 +31,6 @@ Route::middleware('auth', 'validatelevels:admin')->group(function () {
 
     Route::get('admin/data/bahan/variant/getData/{productId}', [Admin\StockOutController::class, 'getVariants'])->name('get.variants');
 
-    Route::get('admin/data/bahan/variant/safetystock', [Admin\SafetyStockController::class, 'updateSafetyStock'])->name('update.safety.stock');
-
     Route::post('admin/data/bahan', [Admin\ProductController::class, 'storeBahanBaku'])->name('store.bahan');
     Route::post('admin/data/bahan/variant', [Admin\VariantController::class, 'storeVariant'])->name('store.variant');
     Route::post('admin/data/bahan/suppliers', [Admin\SupplierController::class, 'storeSuppliers'])->name('store.suppliers');
@@ -53,5 +51,5 @@ Route::middleware('auth', 'validatelevels:admin')->group(function () {
 
 Route::middleware('auth', 'validatelevels:owner')->group(function () {
     Route::get('owner/dashboard', [Admin\DashboardController::class, 'index'])->name('admin.dashboard');
-
+    Route::get('owner/data/bahan/variant/safetystock', [Admin\SafetyStockController::class, 'updateSafetyStock'])->name('update.safety.stock');
 });

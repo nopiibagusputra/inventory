@@ -59,6 +59,6 @@ class SafetyStockController extends Controller
         }
 
         $request->session()->flash('info', 'Safety Stock berhasil dikalkulasi!');
-        return redirect('/admin/dashboard');
+        return redirect('/owner/dashboard');
     }
 }

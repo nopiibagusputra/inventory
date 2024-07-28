@@ -11,6 +11,9 @@ class AuthController extends Controller
 {
     public function index(){
         if (Auth::check()) {
+            if(Auth::user()->level_user == 'admin'){
+                return redirect(Auth::user()->level_user.'/data/bahan');
+            }
             return redirect(Auth::user()->level_user.'/dashboard');
         }
         return view('login.index'); 
@@ -18,6 +21,9 @@ class AuthController extends Controller
 
     public function login(Request $request){
         if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){
+            if(Auth::user()->level_user == 'admin'){
+                return redirect(Auth::user()->level_user.'/data/bahan');
+            }
             return redirect(Auth::user()->level_user.'/dashboard');
         }
         return redirect('/')->with('error', 'Alamat Email atau Kata Sandi Salah');

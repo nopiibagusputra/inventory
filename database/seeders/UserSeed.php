@@ -26,6 +26,13 @@ class UserSeed extends Seeder
             'nama_karyawan' => 'Reiki',
             'active'        => 1
         ]);
+        User::create([
+            'username'      => 'owner@owner.com',
+            'password'      => bcrypt('owner'),
+            'level_user'    => 'owner',
+            'nama_karyawan' => 'Toddi',
+            'active'        => 1
+        ]);
         Schema::enableForeignKeyConstraints();
     }
 }

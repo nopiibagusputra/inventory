@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Variants;
 use App\Models\Products;
 use App\Models\StockOuts;
+use App\Models\Suppliers;
 use DB;
 
 class DashboardController extends Controller
@@ -31,9 +32,18 @@ class DashboardController extends Controller
                         ->orderBy('total_sold', 'DESC')
                         ->get();
 
+        $countStock = Variants::count('code');
+        $countProduct = Products::count('code');
+        $countSupplier = Suppliers::count('kode');
+        $sumStockOut = StockOuts::sum('stock');
+
         return view('admin.dashboard', [
             'data' => $data,
-            'stock_out' => $stockOuts
+            'stock_out' => $stockOuts,
+            'allVariants' => $countStock,
+            'allProducts' => $countProduct,
+            'allSuppliers' => $countSupplier,
+            'sumStockOuts' => $sumStockOut
         ]);
     }
 

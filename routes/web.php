@@ -21,7 +21,7 @@ Route::post('/auth', [Auth\AuthController::class, 'login'])->name('auth_login');
 
 //level admin
 Route::middleware('auth', 'validatelevels:admin')->group(function () {
-    Route::get('admin/dashboard', [Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+    // Route::get('admin/dashboard', [Admin\DashboardController::class, 'index'])->name('admin.dashboard');
     
     Route::get('admin/data/bahan', [Admin\ProductController::class, 'listBahanBaku'])->name('list.bahan');
     Route::get('admin/data/bahan/variant', [Admin\VariantController::class, 'listVariant'])->name('list.variant');
@@ -48,5 +48,10 @@ Route::middleware('auth', 'validatelevels:admin')->group(function () {
     Route::delete('admin/data/bahan', [Admin\ProductController::class, 'deleteBahanBaku'])->name('delete.bahan');
     Route::delete('admin/data/bahan/variant', [Admin\VariantController::class, 'deleteVariant'])->name('delete.variant');
     Route::delete('admin/data/bahan/suppliers', [Admin\SupplierController::class, 'deleteSuppliers'])->name('delete.suppliers');
+
+});
+
+Route::middleware('auth', 'validatelevels:owner')->group(function () {
+    Route::get('owner/dashboard', [Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 
 });

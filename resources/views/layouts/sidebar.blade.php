@@ -25,19 +25,22 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+              
+               @if(Auth::user()->level_user == 'owner')
                <li class="nav-item">
-                <a href="{{ route('admin.dashboard') }}" class="nav-link">
-                    <i class="nav-icon fas fa-th"></i>
-                    <p>Dashboard</p>
-                </a>
-                </li>
-                <li class="nav-item">
+                   <a href="{{ route('admin.dashboard') }}" class="nav-link">
+                       <i class="nav-icon fas fa-th"></i>
+                       <p>Dashboard</p>
+                   </a>
+               </li>
+               @else
+               <li class="nav-item">
                     <a href="#" class="nav-link">
-                      <i class="nav-icon fas fa-box"></i>
-                      <p>
+                    <i class="nav-icon fas fa-box"></i>
+                    <p>
                         Manajemen Data
                         <i class="fas fa-angle-left right"></i>
-                      </p>
+                    </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
@@ -59,7 +62,7 @@
                             </a>
                         </li>
                     </ul>
-                  </li>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('list.restock') }}" class="nav-link">
                         <i class="nav-icon fas fa-file-contract"></i>
@@ -72,6 +75,7 @@
                         <p>Form Pengeluaran Stock</p>
                     </a>
                 </li>
+               @endif
                 <li class="nav-item">
                     <hr class="sidebar-divider">
                 </li>

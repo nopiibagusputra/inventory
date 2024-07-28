@@ -15,7 +15,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Dashboard v1</li>
+                        <li class="breadcrumb-item active">Dashboard</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -37,14 +37,14 @@
                     <!-- small box -->
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3>150</h3>
+                            <h3>{{ $allVariants }}</h3>
 
-                            <p>New Orders</p>
+                            <p>Total Variants</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{url(Auth::user()->level_user.'/data/bahan/variant')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -52,14 +52,14 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>53<sup style="font-size: 20px">%</sup></h3>
+                            <h3>{{ $allProducts}}</h3>
 
-                            <p>Bounce Rate</p>
+                            <p>Total Products</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
+                            <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{url(Auth::user()->level_user.'/data/bahan')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -67,14 +67,14 @@
                     <!-- small box -->
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>44</h3>
+                            <h3>{{ $allSuppliers }}</h3>
 
-                            <p>User Registrations</p>
+                            <p>Total Supplier</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{url(Auth::user()->level_user.'/data/bahan/suppliers')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -82,14 +82,14 @@
                     <!-- small box -->
                     <div class="small-box bg-danger">
                         <div class="inner">
-                            <h3>65</h3>
+                            <h3>{{$sumStockOuts}}</h3>
 
-                            <p>Unique Visitors</p>
+                            <p>Total Stock Keluar</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-pie-graph"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{url(Auth::user()->level_user.'/data/bahan/variant/out')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -136,7 +136,7 @@
                     <!-- Custom tabs (Charts with tabs)-->
                     <div class="card">
                         <div class="card-header">
-                          <h3 class="card-title">Daftar Stock Out</h3>
+                          <h3 class="card-title">Daftar Stock Keluar</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -146,7 +146,7 @@
                                 <th>Nama Product</th>
                                 <th>Nama Variant</th>
                                 <th>Tanggal Keluar</th>
-                                <th>Total Terjual</th>
+                                <th>Total Keluar</th>
                             </tr>
                             </thead>
                             <tbody>
